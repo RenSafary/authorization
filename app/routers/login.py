@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
-from starlette.middleware.sessions import SessionMiddleware
-
 
 
 router = APIRouter()
@@ -12,9 +10,13 @@ tmpl = Jinja2Templates(directory="./app/templates")
 def form(
     request: Request
 ):
-    return tmpl.TemplateResponse("login.html", {
-        "request": request,
-    })
+    if "user" not in request.session:
+        print("User not authenticated")  # Логирование для отладки
+        return tmpl.TemplateResponse("login.html", {"request": request})
+    else: 
+        return JSONResponse({
+            "message": "You are logged in"
+        })
 
 @router.post("/login")
 def login(

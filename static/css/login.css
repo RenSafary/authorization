@@ -1,0 +1,9 @@
+body{
+    background-color: gray;
+    text-align: center;
+}
+
+.registration_button{
+    text-decoration: none;
+    color: black
+}

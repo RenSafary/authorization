@@ -1,5 +1,6 @@
 fastapi==0.111.0
 Jinja2==3.1.2
 ninja2==0.1
-dotenv
+dotenv==0.9.9
 jose==1.0.0de
+pydantic==2.11.3

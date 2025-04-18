@@ -20,7 +20,6 @@ fake_users_db = {
 }
 
 router = APIRouter()
-tmpl = Jinja2Templates(directory="./app/templates")
 
 api_key = os.environ.get("API_KEY")
 

@@ -1,17 +1,28 @@
 from fastapi import APIRouter, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import JSONResponse
+import os
+from dotenv import load_dotenv
 
 
 router = APIRouter()
 tmpl = Jinja2Templates(directory="./app/templates")
 
-@router.get("/form")
+load_dotenv()
+api_key = os.environ.get("API_KEY")
+
+@router.get("/form/{key}")
 def form(
-    request: Request
+    request: Request,
+    key: str,
 ):
+    print(api_key)
+    if key != api_key:
+        return JSONResponse(
+            {"error": "api key is invalid!"}
+        )
+
     if "user" not in request.session:
-        print("User not authenticated")  # Логирование для отладки
         return tmpl.TemplateResponse("login.html", {"request": request})
     else: 
         return JSONResponse({

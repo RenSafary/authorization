@@ -2,12 +2,16 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
-from routers import login, registration
+from api import login, registration
 
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.add_middleware(SessionMiddleware, secret_key="")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key="",
+    max_age=60
+)
 
 app.include_router(login.router)
 app.include_router(registration.router)

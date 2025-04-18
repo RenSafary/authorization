@@ -4,7 +4,7 @@ from starlette.middleware.sessions import SessionMiddleware
 import os
 from dotenv import load_dotenv
 
-from api import login, registration
+from get_access_token import login, registration
 
 app = FastAPI()
 

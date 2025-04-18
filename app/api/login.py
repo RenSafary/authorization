@@ -48,33 +48,17 @@ def verify_token(request: Request):
         raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
 
 
-@router.get("/form/{key}")
-async def form(
-    request: Request,
+@router.post("/login/{key}/{login}/{password}")
+async def login(
     key: str,
+    login: str,
+    password: str,
 ):
-    print(api_key)
     if key != api_key:
         return JSONResponse(
             {"error": "api key is invalid!"}
         )
-
-    if "user" not in request.session:
-        return tmpl.TemplateResponse("login.html", {"request": request})
-    else:
-        cookie = request.cookies 
-        return JSONResponse({
-            "message": "You are logged in",
-            "cookie": cookie,
-            "session_id": request.session
-        })
-
-@router.post("/login")
-async def login(
-    request: Request,
-    login: str = Form(...),
-    password: str = Form(...)
-):
+    
     user = fake_users_db.get(login)
     if not user or user["password"] != password:
         raise HTTPException(status_code=400, detail="Incorrect login or password")
@@ -88,7 +72,9 @@ async def login(
         secure=True,
         samesite="lax"
     )
-    return response
+    return JSONResponse({
+        "access_token": token,
+    })
 
 @router.get("/protected")
 async def protected(username: str = Depends(verify_token)):
